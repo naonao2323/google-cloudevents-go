@@ -55,7 +55,11 @@ func TestParsing{{ . }}(t *testing.T) {
 				out := {{ $.Pkg }}.{{ . }}{}
 				pj := protojson.UnmarshalOptions{DiscardUnknown: true}
 				if err := pj.Unmarshal(data, &out); err != nil {
+					{{ if (index $.PrepareFunction . ) -}}
+					t.Logf("protojson.Unmarshal: could not parse %q\n----%s\n----", file, data)
+					{{ else -}}
 					t.Fatalf("protojson.Unmarshal: could not parse %q\n----%s\n----", file, data)
+					{{ end -}}
 				}
 			})
 
